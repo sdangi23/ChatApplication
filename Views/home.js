@@ -1,6 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
   
-    showAllMsg();
+    setInterval( () => {
+      showAllMsg();
+    } , 3000);
+    // showAllMsg();
 
 
     document.getElementById("sendMsg").addEventListener("click", (e) => {
