@@ -1,4 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
+  
+    showAllMsg();
+
+
     document.getElementById("sendMsg").addEventListener("click", (e) => {
     e.preventDefault();
     const message = document.getElementById("text-content").value;
@@ -25,3 +29,22 @@ document.addEventListener('DOMContentLoaded', () => {
   })
 })
 });
+
+async function showAllMsg(){
+    const token = localStorage.getItem('token');
+    const dbmsgs = await axios.get('http://localhost:3000/getmsg' , { headers: { "Authorization": token } });
+
+    const textsArr = dbmsgs.data.texts;
+
+    const container = document.getElementById('chat-box');
+    container.innerHTML = '<div class="chat-box" id="chat-box"></div>'
+    textsArr.forEach( (elem) => {
+      const msgDiv = document.createElement('div');
+      msgDiv.innerHTML = `<div class="message secondary">
+      ${elem.userName} :: ${elem.message}
+      <div class="timestamp">02:11</div>
+    </div>`
+      
+      container.appendChild(msgDiv);
+    })
+}

@@ -1,6 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getMsg = exports.saveMsg = void 0;
 const tslib_1 = require("tslib");
+const msg_1 = tslib_1.__importDefault(require("../models/msg"));
 const saveMsg = (req, res) => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
     try {
         const user = req.user;
@@ -13,5 +15,17 @@ const saveMsg = (req, res) => tslib_1.__awaiter(void 0, void 0, void 0, function
         res.status(400).json({ success: false, message: 'Database Operation Failed Try Again' });
     }
 });
-exports.default = saveMsg;
+exports.saveMsg = saveMsg;
+const getMsg = (_req, res) => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
+    try {
+        console.log('-----------------------------Inside Controller-----------------------');
+        const texts = yield msg_1.default.findAll();
+        res.status(201).json({ success: true, message: 'Chats retrieved from DB', texts: texts });
+        return;
+    }
+    catch (_b) {
+        res.status(404).json({ success: false, message: 'Chats retrieval from DB Failed' });
+    }
+});
+exports.getMsg = getMsg;
 //# sourceMappingURL=msg.js.map
