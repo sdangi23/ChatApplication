@@ -45,24 +45,28 @@ export async function signUp(req: Request, res: Response) {
 
   export async function logIn(req: Request, res: Response) {
 
-    const email: string = req.body.email;
-    const password: string = req.body.password;
-    await usertable.findAll({ where: {email: email} })
-      .then( async (result) => {
-        const savedpw = result[0].password!
-        await bcrypt.compare(savedpw, password, async function (error, _response){
-          if(error) {
-            console.log('------------ in password compare block', error, '---------------------')
-            return res.json({ success: false, message: 'Password you enterred doesnt match' })
-          }else{
-            const token: string = await generateToken(result[0].id!)
-            return res.json({success:true, message: 'login Successful' , Accesstoken: token})
-          }
-
-        })
-      })
-      .catch((err) => {
-        console.log(err)
-        return res.sendStatus(400).json({ success: false, message:"User not Found"})
-      });
+    try{
+      const email: string = req.body.email;
+      const inppw: string = req.body.password;
+      const foundUser = await usertable.findOne({ where: {email: email} })
+      if(!foundUser){ 
+        return res.status(400).json({ success: false, message:"User not Found"})         
+      }
+        //console.log(foundUser , '-----------------------USER FOUND---------------------------')
+        const savedpw = foundUser.password
+        const comparison = await bcrypt.compare(inppw , savedpw)
+        if(!comparison) {
+              //console.log('------------ in password comparison gave falsy result block---------------------')
+              return res.status(200).json({ success: false, message: 'Invalid Password, Try Again ...' })
+        } 
+        const token: string = generateToken(foundUser.id)
+        res.status(202).json({success:true, message: 'login Successful' , Accesstoken: token, user: foundUser})
+        return;
+        
     }
+    catch{
+      res.status(404).json( {success: false , message: 'Something went wrong, try again'} )
+      return 
+    }
+
+}

@@ -13,7 +13,10 @@ const user_1 = tslib_1.__importDefault(require("./routes/user"));
 //Routes
 app.use(user_1.default);
 const PORT = process.env.PORT || 3000;
-database_1.default.sync().then(() => {
+database_1.default
+    //.sync({ alter: true })
+    .sync()
+    .then(() => {
     app.listen(PORT, () => {
         console.log(`Server is running at ${PORT}`);
     });

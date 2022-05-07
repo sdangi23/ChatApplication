@@ -19,7 +19,10 @@ app.use(userRoutes);
 
 const PORT = process.env.PORT || 3000;
 
-database.sync().then( () => {
+database
+//.sync({ alter: true })
+.sync()
+.then( () => {
 	app.listen( PORT, () => {
     console.log( `Server is running at ${PORT}` );
   } );

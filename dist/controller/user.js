@@ -45,28 +45,28 @@ function signUp(req, res) {
 exports.signUp = signUp;
 function logIn(req, res) {
     return tslib_1.__awaiter(this, void 0, void 0, function* () {
-        const email = req.body.email;
-        const password = req.body.password;
-        yield user_1.default.findAll({ where: { email: email } })
-            .then((result) => tslib_1.__awaiter(this, void 0, void 0, function* () {
-            const savedpw = result[0].password;
-            yield bcryptjs_1.default.compare(savedpw, password, function (error, _response) {
-                return tslib_1.__awaiter(this, void 0, void 0, function* () {
-                    if (error) {
-                        console.log('------------ in password compare block', error, '---------------------');
-                        return res.json({ success: false, message: 'Password you enterred doesnt match' });
-                    }
-                    else {
-                        const token = yield generateToken(result[0].id);
-                        return res.json({ success: true, message: 'login Successful', Accesstoken: token });
-                    }
-                });
-            });
-        }))
-            .catch((err) => {
-            console.log(err);
-            return res.sendStatus(400).json({ success: false, message: "User not Found" });
-        });
+        try {
+            const email = req.body.email;
+            const inppw = req.body.password;
+            const foundUser = yield user_1.default.findOne({ where: { email: email } });
+            if (!foundUser) {
+                return res.status(400).json({ success: false, message: "User not Found" });
+            }
+            //console.log(foundUser , '-----------------------USER FOUND---------------------------')
+            const savedpw = foundUser.password;
+            const comparison = yield bcryptjs_1.default.compare(inppw, savedpw);
+            if (!comparison) {
+                //console.log('------------ in password comparison gave falsy result block---------------------')
+                return res.status(200).json({ success: false, message: 'Invalid Password, Try Again ...' });
+            }
+            const token = generateToken(foundUser.id);
+            res.status(202).json({ success: true, message: 'login Successful', Accesstoken: token, user: foundUser });
+            return;
+        }
+        catch (_a) {
+            res.status(404).json({ success: false, message: 'Something went wrong, try again' });
+            return;
+        }
     });
 }
 exports.logIn = logIn;
