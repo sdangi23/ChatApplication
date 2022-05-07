@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <script src="signup.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <title>Register</title>
 </head>
 <body>
@@ -16,15 +17,15 @@
                     <img src="./signup.jpeg" alt="loading">
                     <div class="formbox">
                         <form>
-                    <h2>Register account</h2>
-                    <input type="text" name="" placeholder="Username" />
-                    <input type="email" name="" placeholder="Email Address" />
-                    <input type="phone" name="" placeholder="Contact Number" />
-                    <input type="password" name="" placeholder="Create Password" />
-                    <input type="submit" name="" value="Sign Up" />
-                    <p class="footerpara"> Already have an account ??
-                        <a href="login.html" class="switch"> Log In </a>
-                    </p>
+                            <h2>Register account</h2>
+                            <input type="text" id="name" name="" placeholder="Username" />
+                            <input type="email" id="email" name="" placeholder="Email Address" />
+                            <input type="phone" id="phone" name="" placeholder="Contact Number" />
+                            <input type="password" id="password" name="" placeholder="Create Password" />
+                            <button type="submit" class="signupbutton" id="signup"> Sign Up</button> </button>
+                            <p class="footerpara"> Already have an account ??
+                                <a href="login.html" class="switch"> Log In </a>
+                            </p>
                         </form>
                     </div>
                 </div>
