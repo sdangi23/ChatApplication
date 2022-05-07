@@ -1,6 +1,16 @@
 import sequelize from "../utils/database"
 import { DataTypes } from "sequelize"
 
+interface usertable {
+    id: number;
+    name: string;
+    email: string;
+    phnumber: string;
+    password: string;
+    createdAt?: Date;
+    updatedAt?: Date;
+}
+
 const usertable= sequelize.define('Users',{
     id:{
         type:DataTypes.INTEGER.UNSIGNED,

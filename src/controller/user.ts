@@ -1,10 +1,14 @@
 import usertable from "../models/user";
 import bcrypt from "bcryptjs";
 import dotenv from "dotenv";
+import jwt from 'jsonwebtoken';
 dotenv.config();
 
 import {Request, Response} from "express";
 
+function generateToken(id:string){
+  return jwt.sign(id,process.env.JWT_SECRET!)
+}
 
 export async function signUp(req: Request, res: Response) {
 
@@ -37,3 +41,28 @@ export async function signUp(req: Request, res: Response) {
       res.json({ message: "User already exists please login" });
     }
   }
+
+
+  export async function logIn(req: Request, res: Response) {
+
+    const email: string = req.body.email;
+    const password: string = req.body.password;
+    await usertable.findAll({ where: {email: email} })
+      .then( async (result) => {
+        const savedpw = result[0].password!
+        await bcrypt.compare(savedpw, password, async function (error, _response){
+          if(error) {
+            console.log('------------ in password compare block', error, '---------------------')
+            return res.json({ success: false, message: 'Password you enterred doesnt match' })
+          }else{
+            const token: string = await generateToken(result[0].id!)
+            return res.json({success:true, message: 'login Successful' , Accesstoken: token})
+          }
+
+        })
+      })
+      .catch((err) => {
+        console.log(err)
+        return res.sendStatus(400).json({ success: false, message:"User not Found"})
+      });
+    }
