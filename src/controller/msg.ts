@@ -1,6 +1,7 @@
 
 import { Request, Response} from "express";
 import msgtable from "../models/msg";
+import {Op} from "sequelize";
 
 export const saveMsg = async(req: Request, res: Response) => {
     try{
@@ -26,6 +27,18 @@ export const getMsg = async (_req:Request, res: Response) => {
         const texts = await msgtable.findAll();
         res.status(201).json( {success: true , message: 'Chats retrieved from DB' , texts: texts})
         return;
+    }
+    catch{
+        res.status(404).json( {success: false , message: 'Chats retrieval from DB Failed' } )
+    }
+}
+
+export const updateMsg = async (req: Request , res: Response) => {
+    try{
+    const id = req.query.id;
+    const texts = await msgtable.findAll( {where: { msgid: { [Op.gte]: id }}});
+    res.status(201).json( {success: true , message: 'Chats retrieved from DB' , texts: texts})
+    return;
     }
     catch{
         res.status(404).json( {success: false , message: 'Chats retrieval from DB Failed' } )
