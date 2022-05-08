@@ -9,23 +9,37 @@ const saveMsg = (req, res) => tslib_1.__awaiter(void 0, void 0, void 0, function
         const user = req.user;
         const message = req.body.message;
         const username = req.user.name;
-        yield user.createText({ message: message, userName: username });
-        res.status(201).json({ success: true, message: 'Text Saved to DB' });
+        const grpId = req.query.id;
+        if (!grpId) {
+            yield user.createText({ message: message, userName: username });
+            return res.status(201).json({ success: true, message: 'Text Saved to DB' });
+        }
+        else {
+            yield user.createText({ message: message, userName: username, GroupGrpId: grpId });
+            return res.status(201).json({ success: true, message: 'Text Saved to DB' });
+        }
     }
     catch (_a) {
-        res.status(400).json({ success: false, message: 'Database Operation Failed Try Again' });
+        return res.status(400).json({ success: false, message: 'Database Operation Failed Try Again' });
     }
 });
 exports.saveMsg = saveMsg;
-const getMsg = (_req, res) => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
+const getMsg = (req, res) => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
     try {
-        console.log('-----------------------------Inside Controller-----------------------');
-        const texts = yield msg_1.default.findAll();
-        res.status(201).json({ success: true, message: 'Chats retrieved from DB', texts: texts });
-        return;
+        const grpId = req.query.id;
+        if (!grpId) {
+            console.log('-----------------------------Inside Controller-----------------------');
+            const texts = yield msg_1.default.findAll({ where: { GroupGrpId: null } });
+            res.status(201).json({ success: true, message: 'Chats retrieved from DB', texts: texts });
+            return;
+        }
+        else {
+            const texts = yield msg_1.default.findAll({ where: { GroupGrpId: grpId } });
+            return res.status(201).json({ success: true, message: 'Group Chats retrieved from DB', texts: texts });
+        }
     }
     catch (_b) {
-        res.status(404).json({ success: false, message: 'Chats retrieval from DB Failed' });
+        return res.status(404).json({ success: false, message: 'Chats retrieval from DB Failed' });
     }
 });
 exports.getMsg = getMsg;

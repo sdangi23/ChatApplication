@@ -1,3 +1,4 @@
+
 document.addEventListener('DOMContentLoaded', () => {
 
   //loading signedup users
@@ -29,6 +30,28 @@ document.addEventListener('DOMContentLoaded', () => {
     saveMsg(msgdetails, token);
 })
 });
+
+async function sendMsgGroup(grpId){
+        console.log('------------  trying to send group message ----------------')
+        const message = document.getElementById("text-content").value;
+        const token = localStorage.getItem('token');
+        const msgdetails = {
+            message: message, 
+            token: token
+        }
+        try{
+        const result = await axios.post(`http://localhost:3000/savemsg?id=${grpId}`, msgdetails, { headers: { "Authorization": token } })
+          alert(result.data.message); 
+          if(result.status === 201){   
+              document.getElementById("text-content").value="";
+          }else{
+            console.log('Failed')
+          }
+        }catch{
+          alert('Try Again');
+        }
+
+}
 
 async function saveMsg(msgdetails, token){
       axios.post('http://localhost:3000/savemsg', msgdetails, { headers: { "Authorization": token } })
@@ -201,5 +224,25 @@ async function addToGrp(uId){
 }
 
 async function showGroupMsgs(grpId) {
-  console.log('Badhai ho yahan tak bhi log pahuch nahi pate hain.')
+
+    const token = localStorage.getItem('token');
+    const dbmsgs = await axios.get(`http://localhost:3000/getmsg?id=${grpId} `, { headers: { "Authorization": token } });
+
+    const textsArr = dbmsgs.data.texts;
+    console.log(textsArr);
+
+    const container = document.getElementById('chat-box');
+    container.innerHTML = '<div class="chat-box" id="chat-box"></div>'
+    textsArr.forEach( (elem) => {
+      const msgDiv = document.createElement('div');
+      msgDiv.innerHTML = `<div class="message secondary">
+      ${elem.userName} :: ${elem.message}
+      <div class="timestamp">02:11</div>
+    </div>`
+      
+      container.appendChild(msgDiv);
+
+    })
+    document.getElementById("input-area").innerHTML = `<input type="text" name="" id="text-content" />
+    <button id="sendMsgGroup" onclick="sendMsgGroup(${grpId})"><i class="fas fa-paper-plane"> SEND to Group </i></button>`
 }

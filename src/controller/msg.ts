@@ -8,28 +8,44 @@ export const saveMsg = async(req: Request, res: Response) => {
     const user = req.user;
     const message: string = req.body.message;
     const username: string = req.user.name;
+    const grpId = req.query.id;
 
-    await user.createText( {message: message , userName: username} )
+    if(!grpId){
+        await user.createText( {message: message , userName: username} )
 
     
-        res.status(201).json({success: true , message: 'Text Saved to DB'})
+        return res.status(201).json({success: true , message: 'Text Saved to DB'})
+    }else{
+        await user.createText({ message: message, userName: username, GroupGrpId:grpId })
+
+        return res.status(201).json({success: true , message: 'Text Saved to DB'})
+    }
+
+
     }
     catch{
     
-        res.status(400).json( {success: false, message: 'Database Operation Failed Try Again'});
+        return res.status(400).json( {success: false, message: 'Database Operation Failed Try Again'});
     }
 
 }
 
-export const getMsg = async (_req:Request, res: Response) => {
+export const getMsg = async (req:Request, res: Response) => {
     try{
+        const grpId = req.query.id;
+        if(!grpId){
         console.log('-----------------------------Inside Controller-----------------------');
-        const texts = await msgtable.findAll();
+        const texts = await msgtable.findAll( {where: {GroupGrpId: null}} );
         res.status(201).json( {success: true , message: 'Chats retrieved from DB' , texts: texts})
         return;
+        }
+        else{
+            const texts = await msgtable.findAll( {where:{GroupGrpId: grpId} });
+            return res.status(201).json({success: true , message: 'Group Chats retrieved from DB' , texts: texts});
+        }
     }
     catch{
-        res.status(404).json( {success: false , message: 'Chats retrieval from DB Failed' } )
+        return res.status(404).json( {success: false , message: 'Chats retrieval from DB Failed' } )
     }
 }
 
