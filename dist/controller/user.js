@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.logIn = exports.signUp = void 0;
+exports.getUsers = exports.logIn = exports.signUp = void 0;
 const tslib_1 = require("tslib");
 const user_1 = tslib_1.__importDefault(require("../models/user"));
 const bcryptjs_1 = tslib_1.__importDefault(require("bcryptjs"));
@@ -70,4 +70,16 @@ function logIn(req, res) {
     });
 }
 exports.logIn = logIn;
+function getUsers(_req, res) {
+    return tslib_1.__awaiter(this, void 0, void 0, function* () {
+        try {
+            const dbusers = yield user_1.default.findAll();
+            res.json({ success: true, message: 'All users fetched', dbusers });
+        }
+        catch (_a) {
+            res.json({ success: false, message: 'Database fetching failed' });
+        }
+    });
+}
+exports.getUsers = getUsers;
 //# sourceMappingURL=user.js.map

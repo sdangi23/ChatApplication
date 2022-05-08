@@ -70,3 +70,13 @@ export async function signUp(req: Request, res: Response) {
     }
 
 }
+
+export async function getUsers(_req: Request, res: Response) {
+  try{
+    const dbusers = await usertable.findAll();
+    res.json( {success: true , message:'All users fetched' , dbusers} );
+  }
+  catch{
+    res.json( {success: false , message: 'Database fetching failed' })
+  }
+}

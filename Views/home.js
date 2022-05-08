@@ -1,11 +1,20 @@
 document.addEventListener('DOMContentLoaded', () => {
 
+  //loading signedup users
+
+  //loading & updating messages
   showAllMsg();
   setInterval( () => {
       updateMsg();
     } , 3000);
 
+    //creating a chat group
+    document.getElementById('create-group').addEventListener('click' , (e) => {
+        e.preventDefault();
+        showAvailableUsers();
+    })
 
+    //Send Message Button Functionality
     document.getElementById("sendMsg").addEventListener("click", (e) => {
     e.preventDefault();
       
@@ -101,4 +110,56 @@ async function updateMsg(){
       
     })
   
+}
+
+async function showAvailableUsers(){
+  console.log('------------------ yes i am working ------------');
+  const dbout = await axios.get('http://localhost:3000/getusers');
+  const dbusers = dbout.data.dbusers;
+
+  const userContainer = document.getElementById('myModal2');
+  userContainer.innerHTML = `<div class="modal-content" id="myModal2">
+  <span class="close">&times;</span>
+  <input type="text" id="grpname" name="grpname" placeholder="Enter Name Of Your Group"><br>
+</div>`;
+  
+  dbusers.forEach( (user) => {
+    const usrbtn = document.createElement('button');
+    usrbtn.innerHTML = `<button class="usr-btn" id="${user.id}" onclick="addToGrp(${user.id})"> ${user.name}</button>`;
+    userContainer.appendChild(usrbtn);
+  })
+
+  //popup functionality
+  {
+  const modal = document.getElementById("myModal");
+    
+    // Get the button that opens the modal
+    const btn = document.getElementById("create-group");
+    
+    // Get the <span> element that closes the modal
+    const span = document.getElementsByClassName("close")[0];
+    
+    // When the user clicks the button, open the modal 
+    btn.onclick = function() {
+      modal.style.display = "block";
+    }
+    
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+      modal.style.display = "none";
+    }
+    
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
+  }
+
+}
+
+async function addToGrp(uId){
+  const groupName = document.getElementById('grpname').value;
+  console.log('----------group name desired ==> ' , groupName);
 }
