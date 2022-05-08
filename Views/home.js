@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
   //loading signedup users
 
   //loading & updating messages
+  showMemberGroups();
   showAllMsg();
   setInterval( () => {
       updateMsg();
@@ -112,8 +113,26 @@ async function updateMsg(){
   
 }
 
+async function showMemberGroups() {
+  console.log('------------------ fetching Member Groups------------');
+  const token = localStorage.getItem('token');
+  const dbout = await axios.get('http://localhost:3000/getGrps' , { headers: { "Authorization": token } });
+  const dbgroups = dbout.data.memberOf;
+
+  const groupContainer = document.getElementById('groups-list');
+  groupContainer.innerHTML = ``;
+
+  dbgroups.forEach( (group) => {
+    const usrbtn = document.createElement('button');
+    usrbtn.innerHTML = `<div class="group-list"><button class="usr-btn" id="${group.grpId}" onclick="showGroupMsgs(${group.grpId})"> ${group.grpName}</button></div>`;
+    groupContainer.appendChild(usrbtn);
+  })
+
+
+}
+
 async function showAvailableUsers(){
-  console.log('------------------ yes i am working ------------');
+
   const dbout = await axios.get('http://localhost:3000/getusers');
   const dbusers = dbout.data.dbusers;
 
@@ -125,7 +144,13 @@ async function showAvailableUsers(){
   
   dbusers.forEach( (user) => {
     const usrbtn = document.createElement('button');
-    usrbtn.innerHTML = `<button class="usr-btn" id="${user.id}" onclick="addToGrp(${user.id})"> ${user.name}</button>`;
+    usrbtn.innerHTML = `<div class="grp-creation"><div>
+    <label for="isAdmin">Admin Access ??</label>
+    <select name="isAdmin" id="isAdmin_${user.id}">
+      <option value="true">Yes</option>
+      <option value="false" selected>No</option>
+    </select>
+  </div><div><button class="usr-btn" id="${user.id}" onclick="addToGrp(${user.id})"> ${user.name}</button></div></div>`;
     userContainer.appendChild(usrbtn);
   })
 
@@ -161,5 +186,20 @@ async function showAvailableUsers(){
 
 async function addToGrp(uId){
   const groupName = document.getElementById('grpname').value;
-  console.log('----------group name desired ==> ' , groupName);
+  const isAdmin = document.getElementById(`isAdmin_${uId}`).value;
+  if(groupName == ''){
+    alert('Please give Name of Group, you want to create');
+    return;
+  }
+
+  const groupDetails = {
+    groupName, isAdmin , uId
+  }
+  const token = localStorage.getItem('token');
+  const result = await axios.post('http://localhost:3000/createGrp', groupDetails, { headers: { "Authorization": token } })
+  alert(result.data.message);
+}
+
+async function showGroupMsgs(grpId) {
+  console.log('Badhai ho yahan tak bhi log pahuch nahi pate hain.')
 }

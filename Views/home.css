@@ -60,7 +60,10 @@ body {
     flex-direction: column;
 }
 
-
+.grp-creation {
+    display: flex;
+    justify-content: space-around;
+}
 
 .usr-btn {
     width: 100%;
@@ -76,6 +79,12 @@ body {
     cursor: pointer;
     -webkit-transition-duration: 0.4s; /* Safari */
     transition-duration: 0.4s;
+}
+
+.group-list {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .usr-btn:hover {
