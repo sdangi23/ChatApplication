@@ -40,7 +40,7 @@ async function sendMsgGroup(grpId){
             token: token
         }
         try{
-        const result = await axios.post(`http://localhost:3000/savemsg?id=${grpId}`, msgdetails, { headers: { "Authorization": token } })
+        const result = await axios.post(`http://3.88.142.157:3000/savemsg?id=${grpId}`, msgdetails, { headers: { "Authorization": token } })
           alert(result.data.message); 
           if(result.status === 201){   
               document.getElementById("text-content").value="";
@@ -54,7 +54,7 @@ async function sendMsgGroup(grpId){
 }
 
 async function saveMsg(msgdetails, token){
-      axios.post('http://localhost:3000/savemsg', msgdetails, { headers: { "Authorization": token } })
+      axios.post('http://3.88.142.157:3000/savemsg', msgdetails, { headers: { "Authorization": token } })
       .then((result) => {
         alert(result.data.message); 
         if(result.status === 201){   
@@ -70,7 +70,7 @@ async function saveMsg(msgdetails, token){
 
 async function showAllMsg(){
     const token = localStorage.getItem('token');
-    const dbmsgs = await axios.get('http://localhost:3000/getmsg' , { headers: { "Authorization": token } });
+    const dbmsgs = await axios.get('http://3.88.142.157:3000/getmsg' , { headers: { "Authorization": token } });
 
     const textsArr = dbmsgs.data.texts;
     let localTexts = [];
@@ -102,7 +102,7 @@ async function updateMsg(){
     const localArr = JSON.parse(localStorage.getItem('lastMsg'));
     const lastId = localArr[localArr.length-1].msgid+1;
     const token = localStorage.getItem('token');
-    const dbmsgs = await axios.get(`http://localhost:3000/updatemsg?id=${lastId}` , { headers: { "Authorization": token } });
+    const dbmsgs = await axios.get(`http://3.88.142.157:3000/updatemsg?id=${lastId}` , { headers: { "Authorization": token } });
     const newArr = dbmsgs.data.texts;
     console.log('----- main call to ho ra hu --------- ');
     if(newArr.length === 0){
@@ -139,7 +139,7 @@ async function updateMsg(){
 async function showMemberGroups() {
   console.log('------------------ fetching Member Groups------------');
   const token = localStorage.getItem('token');
-  const dbout = await axios.get('http://localhost:3000/getGrps' , { headers: { "Authorization": token } });
+  const dbout = await axios.get('http://3.88.142.157:3000/getGrps' , { headers: { "Authorization": token } });
   const dbgroups = dbout.data.memberOf;
 
   const groupContainer = document.getElementById('groups-list');
@@ -154,7 +154,7 @@ async function showMemberGroups() {
 
 async function showAvailableUsers(){
 
-  const dbout = await axios.get('http://localhost:3000/getusers');
+  const dbout = await axios.get('http://3.88.142.157:3000/getusers');
   const dbusers = dbout.data.dbusers;
 
   const userContainer = document.getElementById('myModal2');
@@ -217,14 +217,14 @@ async function addToGrp(uId){
     groupName, isAdmin , uId
   }
   const token = localStorage.getItem('token');
-  const result = await axios.post('http://localhost:3000/createGrp', groupDetails, { headers: { "Authorization": token } })
+  const result = await axios.post('http://3.88.142.157:3000/createGrp', groupDetails, { headers: { "Authorization": token } })
   alert(result.data.message);
 }
 
 async function showGroupMsgs(grpId) {
 
     const token = localStorage.getItem('token');
-    const dbmsgs = await axios.get(`http://localhost:3000/getmsg?id=${grpId} `, { headers: { "Authorization": token } });
+    const dbmsgs = await axios.get(`http://3.88.142.157:3000/getmsg?id=${grpId} `, { headers: { "Authorization": token } });
 
     const textsArr = dbmsgs.data.texts;
     console.log(textsArr);
@@ -244,7 +244,7 @@ async function showGroupMsgs(grpId) {
     document.getElementById("input-area").innerHTML = `<input type="text" name="" id="text-content" />
     <button id="sendMsgGroup" onclick="sendMsgGroup(${grpId})"><i class="fas fa-paper-plane"> SEND to Group </i></button>`;
 
-    const resultdb = await axios.get(`http://localhost:3000/getusers/?id=${grpId}`);
+    const resultdb = await axios.get(`http://3.88.142.157:3000/getusers/?id=${grpId}`);
     const dbusers = resultdb.data.dbusers;
     const grpMemContainer = document.getElementById('Group-Members');
     grpMemContainer.innerHTML = `<ul id="Group-Members"></ul>`;
@@ -258,6 +258,6 @@ async function showGroupMsgs(grpId) {
 async function removeUser(uId , grpId){
   console.log(`------ we are deleting user from this group with userId = ${uId} from ${grpId} --------`)
   const token = localStorage.getItem('token');
-  const result = await axios.post(`http://localhost:3000/removeuser` , {uId: uId , grpId: grpId} , { headers: { "Authorization": token } } )
+  const result = await axios.post(`http://3.88.142.157:3000/removeuser` , {uId: uId , grpId: grpId} , { headers: { "Authorization": token } } )
   alert(result.data.message);
 }

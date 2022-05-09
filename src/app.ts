@@ -40,7 +40,7 @@ import groupRoutes from './routes/grp';
 app.use(userRoutes);
 app.use(msgRoutes);
 app.use(groupRoutes);
-app.use((req: Request, res:Response, _next:NextFunction) => {
+app.use((_req: Request, res:Response, _next:NextFunction) => {
   res.sendFile(path.join(__dirname , `../Views/login.html`))
 })
 
