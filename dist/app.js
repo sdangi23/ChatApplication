@@ -5,6 +5,7 @@ const express_1 = tslib_1.__importDefault(require("express"));
 const cors_1 = tslib_1.__importDefault(require("cors"));
 const dotenv_1 = tslib_1.__importDefault(require("dotenv"));
 const database_1 = tslib_1.__importDefault(require("./utils/database"));
+const path_1 = tslib_1.__importDefault(require("path"));
 dotenv_1.default.config();
 const user_1 = tslib_1.__importDefault(require("./models/user"));
 const msg_1 = tslib_1.__importDefault(require("./models/msg"));
@@ -21,6 +22,7 @@ msg_1.default.belongsTo(group_1.default);
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());
+app.use(express_1.default.static(path_1.default.join(__dirname, "..", "Views")));
 const user_2 = tslib_1.__importDefault(require("./routes/user"));
 const msg_2 = tslib_1.__importDefault(require("./routes/msg"));
 const grp_1 = tslib_1.__importDefault(require("./routes/grp"));
@@ -28,6 +30,9 @@ const grp_1 = tslib_1.__importDefault(require("./routes/grp"));
 app.use(user_2.default);
 app.use(msg_2.default);
 app.use(grp_1.default);
+app.use((req, res, _next) => {
+    res.sendFile(path_1.default.join(__dirname, `../Views/login.html`));
+});
 const PORT = process.env.PORT || 3000;
 database_1.default
     //.sync({ alter: true })
