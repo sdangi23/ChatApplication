@@ -22,7 +22,7 @@ export async function authenticate(req: Request , res: Response, next:NextFuncti
         return res.status(404).json( { success: false, message: 'token not found' } );
     }
     catch(err){
-        console.log(err);
+        // console.log(err);
         return res.status(404).json( {success: false , message: 'user authentication failed' , error: err} )
     }
 }

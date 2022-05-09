@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="home.css">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="home.js"></script>
@@ -94,6 +95,17 @@
             <div class="input-area" id="input-area">
               <input type="text" name="" id="text-content" />
               <button id="sendMsg"><i class="fas fa-paper-plane"> SEND </i></button>
+              <button id="send" class="upload-prompt" onclick="uploadTabOpen()"><i class="fa fa-upload" style="font-size:36px"></i></button>
+            </div>
+
+            <div id="file-upload">
+              <h2>Choose a file to upload</h2>
+              <div>
+                <form>
+                  <input type="file" name="uploadFile" id="uploader"></input>
+                  <button type="button" id="upload-btn" onclick="upload()">Upload</button>
+                </form>
+              </div>
             </div>
             
           </div>

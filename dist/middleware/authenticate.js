@@ -20,7 +20,7 @@ function authenticate(req, res, next) {
             return res.status(404).json({ success: false, message: 'token not found' });
         }
         catch (err) {
-            console.log(err);
+            // console.log(err);
             return res.status(404).json({ success: false, message: 'user authentication failed', error: err });
         }
     });

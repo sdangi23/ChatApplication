@@ -6,9 +6,9 @@ document.addEventListener('DOMContentLoaded', () => {
   //loading & updating messages
   showMemberGroups();
   showAllMsg();
-  setInterval( () => {
-      updateMsg();
-    } , 3000);
+  // setInterval( () => {
+  //     updateMsg();
+  //   } , 3000);
 
     //creating a chat group
     document.getElementById('create-group').addEventListener('click' , (e) => {
@@ -260,4 +260,29 @@ async function removeUser(uId , grpId){
   const token = localStorage.getItem('token');
   const result = await axios.post(`http://localhost:3000/removeuser` , {uId: uId , grpId: grpId} , { headers: { "Authorization": token } } )
   alert(result.data.message);
+}
+
+async function uploadTabOpen(){
+  console.log('------------- making dispplay block');
+  document.getElementById('file-upload').style.display = 'block';
+}
+
+async function upload(){
+  console.log('---------------- you are inside function trying to upload --------------------');
+  const file = document.getElementById('uploader').files[0];
+  const token = localStorage.getItem('token');
+  let formData = new FormData();
+  formData.append('file', file);
+  try {
+    //document.getElementById('file-upload').style.display = 'none';
+    console.log(formData);
+    const res = await axios.post('http://localhost:3000/upload', formData, { headers: { "Authorization": token } } );
+    if (res.status == 200) {
+      alert('File sent');
+    }
+  } catch (err) {
+    console.log(err);
+    alert('Something went wrong');
+  }
+
 }
