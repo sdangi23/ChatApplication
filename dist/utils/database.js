@@ -6,6 +6,6 @@ const dotenv_1 = tslib_1.__importDefault(require("dotenv"));
 dotenv_1.default.config();
 exports.default = new sequelize_1.Sequelize(process.env.DB, process.env.DB_USER, process.env.DB_PASSWORD, {
     dialect: 'mysql',
-    host: "localhost",
+    host: process.env.DB_HOST,
 });
 //# sourceMappingURL=database.js.map

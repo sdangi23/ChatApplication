@@ -30,7 +30,7 @@ const grp_1 = tslib_1.__importDefault(require("./routes/grp"));
 app.use(user_2.default);
 app.use(msg_2.default);
 app.use(grp_1.default);
-app.use((req, res, _next) => {
+app.use((_req, res, _next) => {
     res.sendFile(path_1.default.join(__dirname, `../Views/login.html`));
 });
 const PORT = process.env.PORT || 3000;
