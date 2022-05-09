@@ -51,12 +51,13 @@ export const getMsg = async (req:Request, res: Response) => {
 
 export const updateMsg = async (req: Request , res: Response) => {
     try{
-    const id = req.query.id;
-    const texts = await msgtable.findAll( {where: { msgid: { [Op.gte]: id }}});
-    res.status(201).json( {success: true , message: 'Chats retrieved from DB' , texts: texts})
-    return;
+    const id = req.query.id;         
+    const texts = await msgtable.findAll({where: {msgid:{[Op.gte]:id} ,GroupGrpId: null }});
+
+    return res.status(201).json( {success: true , message: 'Chats retrieved from DB' , texts: texts})
+    
     }
     catch{
-        res.status(404).json( {success: false , message: 'Chats retrieval from DB Failed' } )
+        return res.status(404).json( {success: false , message: 'Chats retrieval from DB Failed' } )
     }
 }

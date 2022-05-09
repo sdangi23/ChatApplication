@@ -150,8 +150,6 @@ async function showMemberGroups() {
     usrbtn.innerHTML = `<div class="group-list"><button class="usr-btn" id="${group.grpId}" onclick="showGroupMsgs(${group.grpId})"> ${group.grpName}</button></div>`;
     groupContainer.appendChild(usrbtn);
   })
-
-
 }
 
 async function showAvailableUsers(){
@@ -244,5 +242,22 @@ async function showGroupMsgs(grpId) {
 
     })
     document.getElementById("input-area").innerHTML = `<input type="text" name="" id="text-content" />
-    <button id="sendMsgGroup" onclick="sendMsgGroup(${grpId})"><i class="fas fa-paper-plane"> SEND to Group </i></button>`
+    <button id="sendMsgGroup" onclick="sendMsgGroup(${grpId})"><i class="fas fa-paper-plane"> SEND to Group </i></button>`;
+
+    const resultdb = await axios.get(`http://localhost:3000/getusers/?id=${grpId}`);
+    const dbusers = resultdb.data.dbusers;
+    const grpMemContainer = document.getElementById('Group-Members');
+    grpMemContainer.innerHTML = `<ul id="Group-Members"></ul>`;
+    dbusers.forEach( (user) => {
+      const usrbtn = document.createElement('li');
+      usrbtn.innerHTML = `<li class="member-btn" id="member-btn">${user.name} <button onclick="removeUser(${user.id} , ${grpId})"> X </button></li>`;
+      grpMemContainer.appendChild(usrbtn);
+    })
+}
+
+async function removeUser(uId , grpId){
+  console.log(`------ we are deleting user from this group with userId = ${uId} from ${grpId} --------`)
+  const token = localStorage.getItem('token');
+  const result = await axios.post(`http://localhost:3000/removeuser` , {uId: uId , grpId: grpId} , { headers: { "Authorization": token } } )
+  alert(result.data.message);
 }

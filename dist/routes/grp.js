@@ -6,5 +6,6 @@ const grp_1 = require("../controller/grp");
 const router = (0, express_1.Router)();
 router.post("/createGrp", authenticate_1.authenticate, grp_1.createGrp);
 router.get("/getGrps", authenticate_1.authenticate, grp_1.getGrps);
+router.post("/removeuser", authenticate_1.authenticate, grp_1.removeUser);
 exports.default = router;
 //# sourceMappingURL=grp.js.map

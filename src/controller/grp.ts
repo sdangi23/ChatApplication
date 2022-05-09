@@ -64,3 +64,23 @@ export const getGrps = async (req :Request, res: Response) => {
     }
 
 }
+
+export const removeUser = async (req :Request, res: Response) => {
+    const uId = req.body.uId;
+    const grpId = req.body.grpId;
+    const loggedId = req.user.id;
+
+    try{
+        const ug = await usergroup.findOne({ where: { UserId: loggedId, GroupGrpId: grpId } });
+    if(ug.isAdmin == true){
+        await usergroup.destroy({ where: { UserId: uId, GroupGrpId: grpId } });
+
+        return res.json({success: true , message: 'User Deleted Successfully from Chat-Group'})
+    }
+    return res.json({success: false , message: 'You dont have admin access for the Chat-Group'})
+
+    }catch{
+        return res.status(404).json({success: false , message: 'database operation failed, try Again ...'});
+    }
+    
+}

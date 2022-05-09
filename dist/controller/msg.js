@@ -46,12 +46,11 @@ exports.getMsg = getMsg;
 const updateMsg = (req, res) => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
     try {
         const id = req.query.id;
-        const texts = yield msg_1.default.findAll({ where: { msgid: { [sequelize_1.Op.gte]: id } } });
-        res.status(201).json({ success: true, message: 'Chats retrieved from DB', texts: texts });
-        return;
+        const texts = yield msg_1.default.findAll({ where: { msgid: { [sequelize_1.Op.gte]: id }, GroupGrpId: null } });
+        return res.status(201).json({ success: true, message: 'Chats retrieved from DB', texts: texts });
     }
     catch (_c) {
-        res.status(404).json({ success: false, message: 'Chats retrieval from DB Failed' });
+        return res.status(404).json({ success: false, message: 'Chats retrieval from DB Failed' });
     }
 });
 exports.updateMsg = updateMsg;

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getGrps = exports.createGrp = void 0;
+exports.removeUser = exports.getGrps = exports.createGrp = void 0;
 const tslib_1 = require("tslib");
 const group_1 = tslib_1.__importDefault(require("../models/group"));
 const usersgroup_1 = tslib_1.__importDefault(require("../models/usersgroup"));
@@ -51,4 +51,21 @@ const getGrps = (req, res) => tslib_1.__awaiter(void 0, void 0, void 0, function
     }
 });
 exports.getGrps = getGrps;
+const removeUser = (req, res) => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
+    const uId = req.body.uId;
+    const grpId = req.body.grpId;
+    const loggedId = req.user.id;
+    try {
+        const ug = yield usersgroup_1.default.findOne({ where: { UserId: loggedId, GroupGrpId: grpId } });
+        if (ug.isAdmin == true) {
+            yield usersgroup_1.default.destroy({ where: { UserId: uId, GroupGrpId: grpId } });
+            return res.json({ success: true, message: 'User Deleted Successfully from Chat-Group' });
+        }
+        return res.json({ success: false, message: 'You dont have admin access for the Chat-Group' });
+    }
+    catch (_c) {
+        return res.status(404).json({ success: false, message: 'database operation failed, try Again ...' });
+    }
+});
+exports.removeUser = removeUser;
 //# sourceMappingURL=grp.js.map

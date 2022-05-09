@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getUsers = exports.logIn = exports.signUp = void 0;
 const tslib_1 = require("tslib");
 const user_1 = tslib_1.__importDefault(require("../models/user"));
+const usersgroup_1 = tslib_1.__importDefault(require("../models/usersgroup"));
 const bcryptjs_1 = tslib_1.__importDefault(require("bcryptjs"));
 const dotenv_1 = tslib_1.__importDefault(require("dotenv"));
 const jsonwebtoken_1 = tslib_1.__importDefault(require("jsonwebtoken"));
@@ -70,14 +71,26 @@ function logIn(req, res) {
     });
 }
 exports.logIn = logIn;
-function getUsers(_req, res) {
+function getUsers(req, res) {
     return tslib_1.__awaiter(this, void 0, void 0, function* () {
         try {
-            const dbusers = yield user_1.default.findAll();
-            res.json({ success: true, message: 'All users fetched', dbusers });
+            const grpId = req.query.id;
+            if (!grpId) {
+                const dbusers = yield user_1.default.findAll();
+                return res.json({ success: true, message: 'All users fetched', dbusers });
+            }
+            else {
+                const groupusers = yield usersgroup_1.default.findAll({ where: { GroupGrpId: grpId } });
+                const grpUserIds = [];
+                groupusers.forEach((elem) => {
+                    grpUserIds.push(elem.UserId);
+                });
+                const dbusers = yield user_1.default.findAll({ where: { id: grpUserIds } });
+                return res.json({ success: true, message: 'All users fetched', dbusers });
+            }
         }
         catch (_a) {
-            res.json({ success: false, message: 'Database fetching failed' });
+            return res.json({ success: false, message: 'Database fetching failed' });
         }
     });
 }

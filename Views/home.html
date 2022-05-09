@@ -18,27 +18,28 @@
                 <ul id="groups-list">
                     <li>School Friends</li>
                     <li> College Friends</li>
-                    <button class="create-group" id="create-group"> Create A Group</button>
-                    <!-- The Modal -->
-                    <div id="myModal" class="modal">
-
-                      <!-- Modal content -->
-                      <div class="modal-content" id="myModal2">
-                        <span class="close">&times;</span>
-                        <p>Choose the Users you want to add to the group</p>
-                      </div>
-
-                    </div>
+                    
+                    
                 </ul>
+                <button class="create-group" id="create-group"> Create A Group</button>
+                  <!-- The Modal -->
+                  <div id="myModal" class="modal">
+
+                    <!-- Modal content -->
+                    <div class="modal-content" id="myModal2">
+                      <span class="close">&times;</span>
+                      <p>Choose the Users you want to add to the group</p>
+                    </div>
+
+                  </div>
             </div>
-            <div class="onlineusers-container">
+            <div class="onlineusers-container" id="groupMembers-container">
             <h3> Available Users </h3>
-                <ul id="users-signedup">
-                    <li>yash</li>
-                    <li>parul</li>
-                    <li>raj</li>
-                    <li>hitesh</li>
-                    <li>shubham</li>
+                <ul id="Group-Members">
+                    <li class="member-btn" id="member-btn">yash <button onclick="removeUser()"> X </button></li>
+                    <li class="member-btn" id="member-btn">yash</li>
+                    <li class="member-btn" id="member-btn">yash</li>
+                    <li class="member-btn" id="member-btn">yash</li>
                 </ul>
             </div>
         </div>

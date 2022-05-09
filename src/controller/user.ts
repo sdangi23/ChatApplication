@@ -1,4 +1,5 @@
 import usertable from "../models/user";
+import usergroup from "../models/usersgroup"
 import bcrypt from "bcryptjs";
 import dotenv from "dotenv";
 import jwt from 'jsonwebtoken';
@@ -71,12 +72,28 @@ export async function signUp(req: Request, res: Response) {
 
 }
 
-export async function getUsers(_req: Request, res: Response) {
+export async function getUsers(req: Request, res: Response) {
   try{
+    const grpId = req.query.id;
+    if(!grpId){
     const dbusers = await usertable.findAll();
-    res.json( {success: true , message:'All users fetched' , dbusers} );
+
+    return res.json( {success: true , message:'All users fetched' , dbusers} );
+
+    }else{
+      const groupusers = await usergroup.findAll({ where: { GroupGrpId: grpId } });
+      const grpUserIds = [];
+      groupusers.forEach( (elem) => {
+        grpUserIds.push(elem.UserId);
+      })
+
+      const dbusers = await usertable.findAll( { where: {id:grpUserIds}} );
+
+      return res.json( {success: true , message:'All users fetched' , dbusers} );
+      
+    }
   }
   catch{
-    res.json( {success: false , message: 'Database fetching failed' })
+    return res.json( {success: false , message: 'Database fetching failed' })
   }
 }

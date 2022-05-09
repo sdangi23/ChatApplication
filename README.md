@@ -16,3 +16,5 @@
       foreignKey: 'following_id',
     });
 remember here Users is called alias and never define same alias in two models, it will throw error during association.
+
+8th Commit: code have few workarounds in admin access paner of chat groups. Right now add-user to group is not optimised. Delete user is fully optimised so cracked the logic, now only have to copy the if condition of checking admin access of loggedin user into add user controller.
