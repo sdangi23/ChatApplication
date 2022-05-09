@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
   };
   console.log(userdetails);
   axios
-  .post("http://3.88.142.157:3000/login", userdetails)
+  .post("http://54.145.181.21:3000/login", userdetails)
   .then((result) => {
     alert(result.data.message); 
     if(result.status === 202){   

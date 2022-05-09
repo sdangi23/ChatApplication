@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 console.log("check me")
   axios
-  .post("http://3.88.142.157:3000/signup", userdetails)
+  .post("http://54.145.181.21:3000/signup", userdetails)
   .then((result) => {
     alert(result.data.message);
     window.location.replace('./login.html')

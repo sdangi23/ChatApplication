@@ -40,8 +40,8 @@ import groupRoutes from './routes/grp';
 app.use(userRoutes);
 app.use(msgRoutes);
 app.use(groupRoutes);
-app.use((_req: Request, res:Response, _next:NextFunction) => {
-  res.sendFile(path.join(__dirname , `../Views/login.html`))
+app.use((req: Request, res:Response, _next:NextFunction) => {
+  res.sendFile(path.join(__dirname , `../Views/${req.url}.html`))
 })
 
 const PORT = process.env.PORT || 3000;
